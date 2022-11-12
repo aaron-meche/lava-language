@@ -1,6 +1,6 @@
 # Lava Coding Language
 ## What is it?
-A web development language written and designed as a prettier, faster, and simpler version of HTML with more features and a cleaner and more concise syntax.
+A web development language written and designed as a prettier, faster, and simpler version of HTML with more features and a cleaner, more concise syntax.
 ## How does it work?
 The client launches an HTML file that runs this online compiler that then reads the lava pages stored on the web server and compiled them to HTML, then displaying the result to the client.
 ## How cam I get started?

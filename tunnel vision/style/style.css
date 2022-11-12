@@ -1,0 +1,163 @@
+@font-face {
+    font-family: Cabin;
+    src: url(Cabin/Cabin-VariableFont_wdth\,wght.ttf);
+}
+
+:root{
+    --faint-accent: rgb(180, 128, 240);
+    --light-accent: rgb(119, 70, 191);
+    --dark-accent: rgb(29, 6, 63);
+
+    --def-space: 15pt;
+    --def-hover-background: rgb(30, 10, 30, 0.4);
+}
+
+body {
+    background: rgb(45,45,45);
+    font-family: Cabin;
+}
+
+.getting-started {
+    background: url(../images/purple_space.jpg) center center no-repeat;
+    background-size: cover;
+}
+
+
+
+.panel {
+    height: auto;
+    max-height: 80vh;
+    width: 350pt;
+    max-width: 80vw;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    overflow: auto;
+    transform: translate(-50%, -50%);
+    background: var(--def-hover-background);
+    color: white;
+    backdrop-filter: blur(var(--def-space));
+    -webkit-backdrop-filter: blur(var(--def-space));
+    -moz-backdrop-filter: blur(var(--def-space));
+    padding: 25pt;
+    border-radius: var(--def-space);
+}
+
+.panel > .title {
+    font-size: 25pt;
+    font-weight: bold;
+    margin-bottom: var(--def-space);
+    text-align: center;
+}
+
+.panel > .description {
+    font-size: 13pt;
+    font-weight: light;
+    margin-bottom: var(--def-space);
+    text-align: center;
+}
+
+.panel > .back {
+    height: 20pt;
+    width: 20pt;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 5pt;
+    margin: 5pt;
+    border-radius: 100vh;
+}
+
+.panel > .back:hover {
+    background: var(--def-hover-background);
+    box-shadow: 1pt 1pt 0 1pt var(--faint-accent);
+}
+
+
+
+.form {
+    background: var(--def-hover-background);
+    border-radius: inherit;
+    padding: 15pt;
+}
+
+.form > .input {
+    background: var(--def-hover-background);
+    font-size: 12pt;
+    padding: 10pt 15pt;
+    border-radius: inherit;
+    color: lightgray;
+    outline: none;
+}
+
+.form > .submit {
+    font-size: 12pt;
+    padding: 15pt 10pt;
+    text-align: center;
+    cursor: pointer;
+    border-radius: inherit;
+    color: lightgray;
+}
+
+
+
+.v-stack { 
+    background: var(--def-hover-background);
+    border-radius: inherit;
+}
+
+.v-stack { 
+    border-radius: inherit;
+}
+
+
+
+.h-stack {
+    white-space: nowrap;
+    overflow-x: scroll;
+    border-radius: inherit;
+}
+
+.h-stack::-webkit-scrollbar {
+    display: none;
+}
+
+.h-stack > .chip {
+    display: inline-block;
+    padding: 10pt 15pt;
+    margin: 0 2pt;
+    background: var(--def-hover-background);
+    border-radius: inherit;
+    cursor: pointer;
+}
+
+.h-stack > .chip:hover {
+    color: var(--faint-accent);
+}
+
+.h-stack > .active-chip {
+    background: var(--def-hover-background);
+    color: var(--faint-accent);
+    font-weight: bold;
+}
+
+.label {
+    font-size: 12pt;
+    font-weight: bold;
+    padding: 20pt 10pt 10pt 10pt;
+    text-align: center;
+}
+
+.button {
+    font-size: 12pt;
+    padding: 15pt 10pt;
+    text-align: center;
+    cursor: pointer;
+    border-radius: inherit;
+    color: lightgray;
+}
+
+.button:hover {
+    background: var(--def-hover-background);
+    color: var(--faint-accent);
+}

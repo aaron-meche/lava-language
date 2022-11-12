@@ -1,0 +1,5 @@
+define > tiger = 4
+
+if > [tiger is 4] {
+
+}

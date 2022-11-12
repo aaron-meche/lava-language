@@ -1,4 +1,4 @@
-let version = '4';
+let version = '1';
 
 window.addEventListener('load', function () {
     let url_param = new URLSearchParams(document.location.search);

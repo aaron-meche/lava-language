@@ -1,0 +1,101 @@
+import css > style/style.css
+import js > scripts/main.js
+
+define title > Welcome to Tunnel Vision
+
+define view > boot > .[getting-started] {
+    elem > .[panel] {
+        lnelm > .[title] > Welcome to Tunnel Vision
+        lnelm > .[description] > Your safe productivity space, workstation, time manager, and mental assistant.
+        elem > .[v-stack] {
+            lnelm > .[label center] > It looks like you don't have any work stations!
+            lnelm > .[button] $[open_view('create')] > Create a work station
+        }
+    }
+}
+
+define view > create > .[getting-started] {
+    elem > .[panel] {
+        lnelm > .[title] > Create a Work Station (1/2)
+        lnelm > .[description] > A work station should be designed for your needs. One size does not always fit all, create different stations for your differnet vibes and moods.
+        img > images/back.png > .[back] $[open_view('boot')]
+        elem > .[form] {
+            lnelm > .[label] > What do you want to call your work station?
+            lnelm > .[input] contenteditable > 
+
+            lnelm > .[label] > Pick level of intensity (pick 1)
+            elem > .[h-stack] {
+                lnelm > .[chip] $[select_chip(this)] > 3 paragraphs in a week
+                lnelm > .[chip] $[select_chip(this)] > Very low
+                lnelm > .[chip] $[select_chip(this)] > Low
+                lnelm > .[chip] $[select_chip(this)] > Normal
+                lnelm > .[chip] $[select_chip(this)] > High
+                lnelm > .[chip] $[select_chip(this)] > Very high
+                lnelm > .[chip] $[select_chip(this)] > 10 page essay in an hour
+            }
+
+            lnelm > .[label] > Select the vibe (pick multiple)
+            elem > .[h-stack] {
+                lnelm > .[chip] $[multi_select_chip(this)] > Galactic
+                lnelm > .[chip] $[multi_select_chip(this)] > Smooth
+                lnelm > .[chip] $[multi_select_chip(this)] > Powerful
+                lnelm > .[chip] $[multi_select_chip(this)] > Chaotic
+                lnelm > .[chip] $[multi_select_chip(this)] > Groovy
+                lnelm > .[chip] $[multi_select_chip(this)] > Wavy
+                lnelm > .[chip] $[multi_select_chip(this)] > Glassy
+            }
+            
+            lnelm > .[submit button] $[open_view('create_2')] > Continue
+        }
+    }
+}
+
+define view > create_2 > .[getting-started] {
+    elem > .[panel] {
+        lnelm > .[title] > Create a Work Station (2/2)
+        lnelm > .[description] > A work station should be designed for your needs. One size does not always fit all, create different stations for your differnet vibes and moods.
+        img > images/back.png > .[back] $[open_view('boot')]
+        elem > .[v-stack] {
+            lnelm > .[label] > What is the main purpose of this work station?
+            lnelm > .[button] $[open_view('create_2'), create_station_survey(1, 1)] > To help cram homework/studying
+            lnelm > .[button] $[open_view('create_2'), create_station_survey(1, 2)] > To create a calm, reliable space to relax and be productive
+            lnelm > .[button] $[open_view('create_2'), create_station_survey(1, 3)] > To help develop a schedule to get work done, to learn to have productive spurts throughout the day/week
+            lnelm > .[button] $[open_view('create_2'), create_station_survey(1, 4)] > To overall relieve stress
+        }
+    }
+}
+
+define view > new_station_created > .[getting-started] {
+    elem > .[panel] {
+        lnelm > .[title] > New Station Created!
+        lnelm > .[description] > A work station should be designed for your needs. One size does not always fit all, create different stations for your differnet vibes and moods.
+        img > images/back.png > .[back] $[open_view('boot')]
+        elem > .[v-stack] {
+            lnelm > .[label] > What is the vibe of this work station?
+            lnelm > .[button] $[open_view('new_station_created'), create_station_survey(2, 1)] > Fast, need for speed, pedal to the metal, vroom vroom
+            lnelm > .[button] $[open_view('new_station_created'), create_station_survey(2, 2)] > Ahh, the beach, the sand, the water, the waves, the sounds, the smells, everything is so nice and peaceful
+            lnelm > .[button] $[open_view('new_station_created'), create_station_survey(2, 3)] > Late night car drives, windows down, radio up, blasting you favorite tunes on a calm autumn night
+            lnelm > .[button] $[open_view('new_station_created'), create_station_survey(2, 4)] > Zen, meditation, relax, stress-free, raking the leaves and drinking hot chocolate
+        }
+    }
+}
+
+~  define view > load > .[getting-started] {
+~      elem > .[panel] {
+~          lnelm > .[title] > Load Work Station
+~          lnelm > .[description] > Your safe productivity space, workstation, time managaer, and mental assistant.
+~          elem > .[vertical-button-display] {
+~              lnelm > .[button] $[open_view('boot')] > Back
+~          }
+~      }
+~  }
+
+~  define view > manage > .[getting-started] {
+~      elem > .[panel] {
+~          lnelm > .[title] > Manage Work Stations
+~          lnelm > .[description] > Click on a work station to edit
+~          elem > .[vertical-button-display] {
+~              lnelm > .[button] $[open_view('boot')] > Back
+~          }
+~      }
+~  }
