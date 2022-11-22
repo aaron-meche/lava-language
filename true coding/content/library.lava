@@ -1,0 +1,29 @@
+let version:   "1.0"
+let name:      "Lava Programming Language"
+let extension: ".lava"
+
+catch magic: $divide: 4,0
+$console.log: magic + ", isn't that crazy?"
+
+~  Standard Library
+func add: num1, num2 {
+    let sum: num1 + num2
+    return: sum
+}
+func subtract: num1, num2 {
+    let difference: num1 - num2
+    return: difference
+}
+func multiply: num1, num2 {
+    let product: num1 * num2
+    return: product
+}
+func divide: num1, num2 {
+    let quotient: num1 / num2
+    if: num2 is 0 {
+        return: "Cannot divide by 0"
+    }
+    else {
+        return: quotient
+    }
+}

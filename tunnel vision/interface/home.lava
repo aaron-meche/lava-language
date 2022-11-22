@@ -14,6 +14,14 @@ define view > boot > .[getting-started] {
     }
 }
 
+hello there welcome to this thing
+
+[hello]
+
+define view > this
+
+define view > #[mainNavbar] .[navbar] > so excited this is so awesome
+
 define view > create > .[getting-started] {
     elem > .[panel] {
         lnelm > .[title] > Create a Work Station (1/2)

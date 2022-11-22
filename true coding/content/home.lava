@@ -1,0 +1,14 @@
+struct card: title, text {
+    elem: .[card] (
+        elem: .[title] (
+            > ${title}
+        )
+        elem: .[text] (
+            > ${text}
+        )
+    )
+}
+
+view boot {
+    import struct: card: "Hello!", "Welcome to the Lava Coding Language"
+}

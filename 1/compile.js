@@ -1,215 +1,147 @@
-let version = '1';
+let lava_version = '2';
 
 window.addEventListener('load', function () {
-    let url_param = new URLSearchParams(document.location.search);
+    let url_param   = new URLSearchParams(document.location.search);
     let url_request = url_param.get('p');
 
     if (url_request) {
-        sessionStorage['activePage'] = urlPageRequest;
-        open_url('index.html');
+        sessionStorage['activePage'] = url_request;
+        window.location.reload();
     } 
-    else if (!sessionStorage['activePage']) {
-        sessionStorage['activePage'] = 'home';
-    }
+    if (!sessionStorage['activePage']) sessionStorage['activePage'] = 'home';
     display(sessionStorage['activePage']);
 })
 
 function display(page_name) {
-    let fetched_content = fetchContents(`content/${page_name}.lava`);
-    let compiled_content = compile(fetched_content);
+    let fetched_content = fetchContents(`./content/${page_name}.lava`);
+
+    var js         = compile(fetched_content);
+    var script     = document.createElement("script");
+    var scriptText = document.createTextNode(js);
+    script.          appendChild(scriptText);
+    document.body.   appendChild(script);
 
     if (fetched_content.includes('<pre>Cannot GET')) {
-        alert('404 Error: Page not found');
+        alert    ('404 Error: Page not found');
         open_page('home');
         window.location.reload();
     } 
-
-    document.body.innerHTML = compile(fetched_content);
-    document.querySelectorAll('div[lavatype="view"]').forEach(function(element) {
-        element.style = `
-            height: 100vh;
-            width: 100vw;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: inherit;
-            overflow: auto;
-            visibility: hidden;
-        `;
-    })
-    open_view('boot');
-    document.querySelectorAll('div[lavatype="module"]').forEach(function(module) {
-        document.querySelectorAll('div[lavatype="module-import"][lavatitle="' + module.getAttribute('lavatitle') + '"]').forEach(function(template) {
-            template.innerHTML = module.innerHTML;
-        })
-    });
-    document.querySelectorAll('div[lavatype="js-import"]').forEach(function(request) {
-        let script = document.createElement("script");
-            script.src = request.getAttribute('lavatitle');
-            script.type = "text/javascript";
-        document.head.appendChild(script);
-    })
-    document.querySelectorAll('div[lavatype="page-preload"]').forEach(function(request) {
-        preload(request.getAttribute('lavatitle'));
-    })
-    document.querySelectorAll('div[lavatype="title"]').forEach(function(element) {
-        document.title = element.getAttribute('lavatitle');
-    })
-
-    main();
+    view_boot();
 }
 
 
 
-// COMPILER
+// WEB COMPILER
 
 function compile(code) {
-    // Will hold viewport contents
-    var collection = '';
-    var splitCode = code.split('\n');
+    let collection = '';
+    code = code.replaceAll(' {','');
+    code = code.replaceAll(' (','');
+    var code_lineSplit = code.split('\n');
 
-    // Cycles through every line of code
-    for (i = 0; i < splitCode.length; i++) {
-        let line = splitCode[i].split(' > ');
+    // Cycle through every line of code
+    for (i = 0; i < code_lineSplit.length; i++) {
+        let line = code_lineSplit[i].trim().split(': ');
+
+        // Key Words
         let instruction = line[0];
-        let first = line[1];
-        let second = line[2];
+        let first =       line[1];
+        let second =      line[2];
+        let third =       line[3];
+        let fourth =      line[3];
+        let fifth =       line[3];
+        let sixth =       line[3];
+        let seventh =     line[3];
+        let eighth =      line[3];
+        let ninth =       line[3];
+        let tenth =       line[3];
 
-        // Reading Lines
-        if (line == '') {
+        // Instruction Breakup
+        let instruction_word = instruction.split(' ');
+        let instruction_key =  instruction_word[0];
+        let instruction_val =  instruction_word[1];
+
+        // Garbage Collecter
+        let first_character = line[0].trim().split('')[0];
+        if (first_character == '~') {
             continue;
         } 
-        else if (line[0].trim().split('')[0] == '~') {
-            continue;
-        } 
-        else if (line[0].trim().split('')[0] == ':') {
-            collection += instruction.replace(': ','');
-            continue;
-        } 
+        else if (first_character == '}') {
+            collection += '}';
+        }
+        else if (first_character == ')') {
+            collection += "+`</div>`";
+        }
         else {
             instruction = instruction.toLowerCase()
             instruction = instruction.replaceAll(' ', '');
-            instruction = instruction.replaceAll('<', '_$vectorStart$_');
-            instruction = instruction.replaceAll('>', '_$vectorEnd$_');
-            instruction = instruction.replaceAll('{', '_$braceStart$_');
-            instruction = instruction.replaceAll('}', '_$braceEnd$_');
-            instruction = instruction.replaceAll('(', '_$parenthesisStart$_');
-            instruction = instruction.replaceAll(')', '_$parenthesisEnd$_');
-            instruction = instruction.replaceAll('/', '_$slash$_');
-            instruction = instruction.replaceAll(' ', '');
-            instruction = instruction.replaceAll('-', '');
+        }
+        
+        
+        // Conditionals
+        if (instruction == 'if') {
+            collection += `if (${convertToAttribute(first)}) {`;
+        }
+        else if (instruction == 'eif') {
+            collection += `else if (${convertToAttribute(first)}) {`;
+        }
+        else if (instruction == 'else') {
+            collection += `else {`;
         }
 
-        // Dictionary
-        const objects = {
-            // Standard HTML
-            title: {
-                format: `<title ${convertToAttribute(second)}>${first}</title>`,
-            },
-            button: {
-                format: `<button ${convertToAttribute(second)}>${first}</button>`,
-            },
-            img: {
-                format: `<img src='${first}' ${convertToAttribute(second)}>`,
-            },
-            link: {
-                format: `<a href='${first}' ${convertToAttribute(second)}>`,
-            },
-            _$slash$_link: {
-                format: `</a>`,
-            },
-            h: {
-                format: `<h1 ${convertToAttribute(second)}>${first}</h1>`,
-            },
-            hh: {
-                format: `<h2 {convertToAttribute(second)}>${first}</h2>`,
-            },
-            hhh: {
-                format: `<h3 ${convertToAttribute(second)}>${first}</h3>`,
-            },
-            p: {
-                format: `<p>`,
-            },
-            _$slash$_p: {
-                format: `</p>`,
-            },
-            break: {
-                format: `<br>`,
-            },
-            form: {
-                format: `<form ${convertToAttribute(first)}>`,
-            },
-            _$slash$_form: {
-                format: `</form>`,
-            },
-            input: {
-                format: `<input ${convertToAttribute(first)}>`,
-            },
-            iframe: {
-                format: `<iframe ${convertToAttribute(first)}></iframe>`,
-            },     
-            div: {
-                format: `<div ${convertToAttribute(first)}>`,
-            }, 
-            elem: {
-                format: `<div ${convertToAttribute(first)}>`,
-            },            
-            lnelm: {
-                format: `<div ${convertToAttribute(first)}>${second}</div>`,
-            },
-            _$braceEnd$_: {
-                format: `</div>`,
-            },  
-
-            // Imports
-            importcss: {
-                format: `<link rel='stylesheet' href='${first}' ${convertToAttribute(second)}>`,
-            },
-            importjs: {
-                format: `<div lavatype='js-import' lavatitle='${first}' style='display:none'></div>`,
-            },
-            importwebicon: {
-                format: `<link rel='shortcut icon' type='image/jpg' href='${first}' ${convertToAttribute(second)}>`,
-            },
-            importmodule: {
-                format: `<div lavatype='module-import' lavatitle='${first}'></div>`,
-            },
-
-            // Defines
-            definetitle: {
-                format: `<div lavatype='title' lavatitle='${convertToAttribute(first)}' style='display:none'></div>`,
-            },
-            definemeta: {
-                format: `<meta ${convertToAttribute(first)}>`,
-            },
-            defineview: {
-                format: `<div lavatype='view' lavatitle='${convertToAttribute(first)}' ${convertToAttribute(second)}>`,
-            },
-            definemodule: {
-                format: `<div lavatype='module' lavatitle='${convertToAttribute(first)}' style='display:none'>`,
-            },
-            definestyle: {
-                format: `<style>`,
-            },
-            _$parenthesisEnd$_: {
-                format: `</style>`,
-            }, 
-
-            // Lava Implementation
-            preload: {
-                format: `<div lavatype='page-preload' lavatitle='${first}' style='display:none'></div>`,
-            },
+        // Functions, Structures, and Views
+        else if (instruction_key == 'func') {
+            collection += `function ${instruction_val} (${first}) {`;
+        }
+        else if (instruction_key == 'struct') {
+            collection += `function struct_${instruction_val} (${first}) { return ""`;
+        }
+        else if (instruction_key == 'view') {
+            collection += `function view_${instruction_val}() {`;
+        }
+        else if (instruction_key == 'import') {
+            // Import Structure
+            if (instruction_val == 'struct') {
+                collection += `document.body.innerHTML += struct_${first}(${second}) ;`;
+            }
         }
 
-        // If command exists
-        if (objects[instruction]) {
-            collection += objects[instruction]['format'];
+        // Viewport Elements
+        else if (instruction == 'elem') {
+            collection += "+`<div " + convertToAttribute(first) + ">`";
         }
-        // If it does not exist, throw error
-        else {
-            console.warn(`Syntax Error: ${line}`);
+        else if (instruction_key == '>') {
+            collection += "+`" + instruction.replace('>', '') + "`";
         }
+
+        // Variables
+        else if (instruction_key == 'let') {
+            collection += `let ${instruction_val} = ${first}`;
+        }
+        else if (instruction_key == 'var') {
+            collection += `var ${instruction_val} = ${first} ;`;
+        }
+        else if (instruction_key == 'const') {
+            collection += `const ${instruction_val} = ${first} ;`;
+        }
+        else if (instruction_key == 'catch') {
+            collection += `let ${instruction_val} = ${first.replace('$','')}(${second}) ;`;
+        }
+
+        // Misc. Operations
+        else if (instruction == 'return') { // Return value from function
+            collection += `return ${first} ;`;
+        }
+        else if (instruction == 'display') { // Insert HTML into DOM
+            collection += `document.body.innerHTML += ${first} ;`;
+        }
+        else if (first_character == '$') { // Call functions
+            collection += `${instruction.replace('$','')}(${first}) ;`;
+        }
+
+        collection += '\n';
     }
+    console.log(collection);
     return collection;
 }
 
@@ -218,35 +150,34 @@ function convertToAttribute(attributes) {
         return '';
     } 
     else {
-        // Base
+        // Quick HTML Actions
         attributes = attributes.replace('.','class');
         attributes = attributes.replace('#','id');
         attributes = attributes.replace('$','onclick');
         attributes = attributes.replace('@','name');
-        // Required for Compile
+        // Extended Actions
         attributes = attributes.replaceAll('[','="');
         attributes = attributes.replaceAll(']','"');
-        attributes = attributes.replaceAll(' {','');
+        attributes = attributes.replaceAll('{','');
+        // Conditional Shortcuts
+        attributes = attributes.replaceAll('is','==');
+        attributes = attributes.replaceAll('iss','===');
+        attributes = attributes.replaceAll('less','<');
+        attributes = attributes.replaceAll('more','>');
         return attributes;
     }
+}
+
+function display_text(text) {
+    document.body.innerHTML += text;
 }
 
 
 
 // LIBRARY
-
 function open_page(page) {
     sessionStorage['activePage'] = page;
     display(page);
-}
-
-function open_view(view) {
-    document.querySelectorAll('div[lavatype="view"]').forEach(function(element) {
-        element.style.visibility = 'hidden';
-    });
-    document.querySelectorAll('div[lavatype="view"][lavatitle="' + view + '"]').forEach(function(element) {
-        element.style.visibility = 'visible';
-    });
 }
 
 function open_url(page) {
@@ -278,19 +209,6 @@ function generateKey(amount) {
     }
     return generatedKey;
 }
-
-function preload(fileName) {
-    let content = fetchContents('pages/' + fileName + '.tgr');
-    if (content.includes('<pre>Cannot GET')) {
-        console.warn('Page Not Found! Preload failed due to 404 error: ' + fileName + '.tgr');
-    } 
-    // If page exists, build page
-    else {
-        sessionStorage['page preload: ' + fileName] = compile(content);
-    }
-}
-
-
 
 // Desktop Page Navigator
 window.addEventListener('keydown', function (event) {
